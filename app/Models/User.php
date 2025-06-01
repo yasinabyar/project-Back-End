@@ -32,6 +32,18 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
+    }
+
+    public function hasRole($role)
+    {
+        if (is_array($role)) {
+            return $this->roles()->whereIn('name', $role)->exists();
+        }
+        return $this->roles()->where('name', $role)->exists();
+    }
 
     /**
      * The attributes that should be cast.
@@ -42,4 +54,5 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
 }
